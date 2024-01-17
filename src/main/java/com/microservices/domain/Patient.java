@@ -23,10 +23,10 @@ public class Patient {
     @Column(name = "genre", nullable = false)
     private Genre genre;
 
-    @Column(name = "adresse_postale", nullable = false)
+    @Column(name = "adresse_postale")
     private String adressePostale;
 
-    @Column(name = "numero_telephone", nullable = false)
+    @Column(name = "numero_telephone")
     private String numeroTelephone;
 
     public Long getId() {
