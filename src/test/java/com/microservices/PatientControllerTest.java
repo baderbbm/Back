@@ -102,7 +102,6 @@ public class PatientControllerTest {
                 .andReturn();
     }
     
-    
     @Test
     public void testAddNewPatient() throws Exception {
         // Créez un nouvel objet Patient pour le corps de la requête
