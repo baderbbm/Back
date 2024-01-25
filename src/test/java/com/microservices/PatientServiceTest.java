@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.sql.Date;
 import java.util.List;
@@ -48,8 +47,7 @@ public class PatientServiceTest {
         assertNotNull(result);
         assertEquals(5, result.size());
     }
-
-
+    
     @Test
     public void testGetPatientById() {
         Long patientId = 1L;
@@ -150,7 +148,7 @@ public class PatientServiceTest {
     @Test
     public void testUpdatePatientNumeroPatientNotFound() {
         // ID du patient inexistant
-        Long id = 10L;
+        Long id = 100L;
 
         // Configurer le mock du repository pour renvoyer Optional vide
         when(patientRepository.findById(id)).thenReturn(Optional.empty());
