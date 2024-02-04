@@ -1,0 +1,29 @@
+version: '3'
+services:
+  patient:
+    image: patient
+    ports:
+      - "8082:8082"
+    networks:
+      - my-network
+    environment:
+      - SERVER_PORT=8082
+      - SPRING_DATASOURCE_URL=jdbc:mysql://localhost:3306/service?serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=rootroot
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQLDialect
+    depends_on:
+      - gateway
+
+  gateway:
+    image: gateway
+    ports:
+      - "8081:8081"
+    networks:
+      - my-network
+    depends_on:
+      - front
+
+networks:
+  my-network:
+    driver: bridge
