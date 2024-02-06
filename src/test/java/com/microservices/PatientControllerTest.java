@@ -23,13 +23,13 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -79,7 +79,7 @@ public class PatientControllerTest {
 
 		when(patientService.updatePatientAdresse(patientId, nouvelleAdresse)).thenReturn(new Patient());
 
-		mockMvc.perform(MockMvcRequestBuilders.put("/patients/{patientId}/update-adresse", patientId)
+		mockMvc.perform(MockMvcRequestBuilders.post("/patients/{patientId}/update-adresse", patientId)
 				.param("nouvelleAdresse", nouvelleAdresse)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).andReturn();
 	}
@@ -91,7 +91,7 @@ public class PatientControllerTest {
 
 		when(patientService.updatePatientNumero(patientId, nouveauNumero)).thenReturn(new Patient());
 
-		mockMvc.perform(MockMvcRequestBuilders.put("/patients/{patientId}/update-numero", patientId)
+		mockMvc.perform(MockMvcRequestBuilders.post("/patients/{patientId}/update-numero", patientId)
 				.param("nouveauNumero", nouveauNumero)).andExpect(MockMvcResultMatchers.status().isOk())
 				.andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON)).andReturn();
 	}
@@ -125,7 +125,7 @@ public class PatientControllerTest {
 				.thenThrow(new PatientNotFoundException("Patient non trouvé avec l'ID : " + patientId));
 
 		mockMvc.perform(
-				put("/patients/{patientId}/update-adresse", patientId).param("nouvelleAdresse", nouvelleAdresse))
+				post("/patients/{patientId}/update-adresse", patientId).param("nouvelleAdresse", nouvelleAdresse))
 				.andExpect(status().isNotFound());
 	}
 
@@ -137,7 +137,7 @@ public class PatientControllerTest {
 		when(patientService.updatePatientNumero(patientId, nouveauNumero))
 				.thenThrow(new PatientNotFoundException("Patient non trouvé avec l'ID : " + patientId));
 
-		mockMvc.perform(put("/patients/{patientId}/update-numero", patientId).param("nouveauNumero", nouveauNumero))
+		mockMvc.perform(post("/patients/{patientId}/update-numero", patientId).param("nouveauNumero", nouveauNumero))
 				.andExpect(status().isNotFound());
 	}
 
