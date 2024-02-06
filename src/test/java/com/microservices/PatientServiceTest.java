@@ -47,7 +47,8 @@ public class PatientServiceTest {
         assertNotNull(result);
         assertEquals(5, result.size());
     }
-    
+
+
     @Test
     public void testGetPatientById() {
         Long patientId = 1L;
