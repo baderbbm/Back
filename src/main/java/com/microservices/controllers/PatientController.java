@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -22,66 +21,58 @@ import java.util.Optional;
 @RequestMapping("/patients")
 public class PatientController {
 
-    @Autowired
-    private PatientService patientService;
+	@Autowired
+	private PatientService patientService;
+	
+	@GetMapping("/all")
+	public ResponseEntity<List<Patient>> getAllPatients() {
+		List<Patient> patients = patientService.getAllPatients();
+		return ResponseEntity.ok(patients);
+	}
 
-    @GetMapping("/all")
-    public ResponseEntity<List<Patient>> getAllPatients() {
-        List<Patient> patients = patientService.getAllPatients();
-        return ResponseEntity.ok(patients);
-    }
+	@GetMapping("/{patientId}")
+	public ResponseEntity<Patient> getPatientById(@PathVariable Long patientId) {
+		try {
+			Optional<Patient> patient = patientService.getPatientById(patientId);
+			return patient.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+		} catch (PatientNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
 
-    @GetMapping("/{patientId}")
-    public ResponseEntity<Patient> getPatientById(@PathVariable Long patientId) {
-        try {
-            Optional<Patient> patient = patientService.getPatientById(patientId);
-            return patient.map(ResponseEntity::ok)
-                          .orElseGet(() -> ResponseEntity.notFound().build());
-        } catch (PatientNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    
-    @PutMapping("/{patientId}/update-adresse")
-    public ResponseEntity<Patient> updatePatientAdresse(
-            @PathVariable Long patientId,
-            @RequestParam String nouvelleAdresse) {
+	@PostMapping("/{patientId}/update-adresse")
+	public ResponseEntity<Patient> updatePatientAdresse(@PathVariable Long patientId,
+			@RequestParam String nouvelleAdresse) {
 
-        try {
-            Patient patient = patientService.updatePatientAdresse(patientId, nouvelleAdresse);
-            return ResponseEntity.ok(patient);
-        } catch (PatientNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
+		try {
+			Patient patient = patientService.updatePatientAdresse(patientId, nouvelleAdresse);
+			return ResponseEntity.ok(patient);
+		} catch (PatientNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
 
-    @PutMapping("/{patientId}/update-numero")
-    public ResponseEntity<Patient> updatePatientNumero(
-            @PathVariable Long patientId,
-            @RequestParam String nouveauNumero) {
+	@PostMapping("/{patientId}/update-numero")
+	public ResponseEntity<Patient> updatePatientNumero(@PathVariable Long patientId,
+			@RequestParam String nouveauNumero) {
 
-        try {
-            Patient patient = patientService.updatePatientNumero(patientId, nouveauNumero);
-            return ResponseEntity.ok(patient);
-        } catch (PatientNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-    
-    @PostMapping("/add")
-    public ResponseEntity<Patient> addNewPatient(@RequestBody Patient newPatient) {
-        try {
-            Patient addedPatient = patientService.addNewPatient(
-                    newPatient.getPrenom(),
-                    newPatient.getNom(),
-                    newPatient.getDateNaissance(),
-                    newPatient.getGenre(),
-                    newPatient.getAdressePostale(),
-                    newPatient.getNumeroTelephone()
-            );
-            return ResponseEntity.ok(addedPatient);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+		try {
+			Patient patient = patientService.updatePatientNumero(patientId, nouveauNumero);
+			return ResponseEntity.ok(patient);
+		} catch (PatientNotFoundException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@PostMapping("/add")
+	public ResponseEntity<Patient> addNewPatient(@RequestBody Patient newPatient) {
+		try {
+			Patient addedPatient = patientService.addNewPatient(newPatient.getPrenom(), newPatient.getNom(),
+					newPatient.getDateNaissance(), newPatient.getGenre(), newPatient.getAdressePostale(),
+					newPatient.getNumeroTelephone());
+			return ResponseEntity.ok(addedPatient);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 }
